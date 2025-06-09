@@ -1,0 +1,58 @@
+#!/bin/bash
+
+base_water="water"
+base_stir="stir"
+base_bestchol="bestchol"
+
+to_decimal() {
+  local num=$1
+  local base=$2
+  local base_len=${#base}
+  local decimal=0
+  local len=${#num}
+
+  for ((i=0; i<len; i++)); do
+    c="${num:i:1}"
+    pos=$(expr index "$base" "$c")
+    if [ "$pos" -eq 0 ]; then
+      echo "Invalid digit: $c" >&2
+      exit 1
+    fi
+    # expr index returns 1-based index; subtract 1 for 0-based digit value
+    digit=$((pos - 1))
+    decimal=$((decimal * base_len + digit))
+  done
+  echo "$decimal"
+}
+
+from_decimal() {
+  local dec=$1
+  local base=$2
+  local base_len=${#base}
+  local result=""
+
+  if [ "$dec" -eq 0 ]; then
+    echo "${base:0:1}"
+    return
+  fi
+
+  while [ "$dec" -gt 0 ]; do
+    rem=$((dec % base_len))
+    dec=$((dec / base_len))
+    digit="${base:rem:1}"
+    result="$digit$result"
+  done
+  echo "$result"
+}
+
+if [ -z "$WATER" ] || [ -z "$STIR" ]; then
+  echo "Please export WATER and STIR environment variables" >&2
+  exit 1
+fi
+
+dec_water=$(to_decimal "$WATER" "$base_water")
+dec_stir=$(to_decimal "$STIR" "$base_stir")
+sum=$((dec_water + dec_stir))
+result=$(from_decimal "$sum" "$base_bestchol")
+
+echo "$result"
