@@ -1,112 +1,56 @@
-# 🌐 Web Infrastructure Design
+# Web Infrastructure Design
 
-This project was completed as part of the **ALX Full Stack Software Engineering** program. It focuses on designing scalable, secure, and efficient web infrastructures while understanding core DevOps and system administration concepts.
+This project, completed during my Prodev Backend engineering training at ALX, focuses on designing robust web infrastructures from simple to production-ready systems.
 
----
+## 🔑 Key Concepts
+- Servers (Web, App, DB)
+- DNS & DNS records
+- Load balancing (HAProxy)
+- Monitoring & logging
+- Firewalls & HTTPS
+- Redundancy & SPOF (Single Point of Failure)
 
-## 📚 Learning Objectives
-
-By the end of this project, you should be able to:
-
-- Design a web infrastructure and explain each component’s role.
-- Identify single points of failure (SPOF) and apply solutions.
-- Understand LAMP architecture and its use in production environments.
-- Explain the roles of:
-  - Web server vs Application server
-  - DNS and DNS record types (A, CNAME, etc.)
-  - Load balancers and distribution algorithms
-  - Database replication (master-slave)
-  - Firewalls and HTTPS
-  - Monitoring systems and their importance
-
----
-
-## 🧠 Key Concepts Covered
-
-- **Network basics & DNS**
-- **Web servers (Nginx)**
-- **Application servers**
-- **MySQL databases**
-- **Load balancing with HAProxy**
-- **SSL/HTTPS security**
-- **Firewalls**
-- **Monitoring (e.g., Sumologic)**
-- **Single Point of Failure (SPOF)**
-
----
-
-## 🗂️ Project Structure
-
-Each diagram below represents a more complex and resilient version of the previous one.
+## 📁 Project Overview
 
 ### `0-simple_web_stack`
-
-**Objective:** Design a basic one-server web infrastructure.
-
-- Components:
-  - 1 Physical server
-  - 1 Web server (Nginx)
-  - 1 Application server
-  - 1 MySQL database
-  - 1 Domain name `foobar.com` (with a `www` CNAME record)
-- IP: `8.8.8.8`
-
-📎 **Image Link:** *(Add your Imgbox or Imgur link here)*
-
----
+A basic infrastructure with:
+- 1 physical server
+- Nginx web server
+- Application server
+- MySQL database
+- Domain name `foobar.com` with www CNAME → A record (8.8.8.8)
 
 ### `1-distributed_web_infrastructure`
-
-**Objective:** Add redundancy and scalability.
-
-- Adds:
-  - 2 more physical servers
-  - 1 Load Balancer (HAProxy)
-  - Separate web/app/db roles for better modularity
-
-📎 **Image Link:** *(Add your Imgbox or Imgur link here)*
-
----
+Improved design with:
+- 3 physical servers
+- Load balancer (HAProxy)
+- Separate app/web servers
+- Centralized database
 
 ### `2-secured_and_monitored_web_infrastructure`
-
-**Objective:** Add security and observability.
-
-- Adds:
-  - 3 Firewalls (network perimeter, app, DB layers)
-  - 1 SSL Certificate (HTTPS)
-  - 3 Monitoring clients (e.g., Sumologic agents)
-
-📎 **Image Link:** *(Add your Imgbox or Imgur link here)*
-
----
+Secured setup with:
+- Firewalls at multiple layers
+- HTTPS via SSL certificate
+- Monitoring agents (e.g. Sumologic)
 
 ### `3-scale_up`
+Scaled version with:
+- Load balancer cluster
+- Dedicated servers for each component
+- Higher availability and modularity
 
-**Objective:** Further scale and cluster load balancers.
+## 📂 Files & Descriptions
 
-- Adds:
-  - 1 new physical server
-  - Load Balancer cluster (HAProxy active-passive)
-  - Dedicated web, app, and DB servers
-
-📎 **Image Link:** *(Add your Imgbox or Imgur link here)*
-
----
-
-## 📁 File Descriptions
-
-| Filename                          | Description |
-|----------------------------------|-------------|
-| `0-simple_web_stack`             | Basic infrastructure with a single LAMP server. |
-| `1-distributed_web_infrastructure` | Adds load balancing and redundancy. |
-| `2-secured_and_monitored_web_infrastructure` | Adds security (firewalls, SSL) and monitoring. |
-| `3-scale_up`                     | Scaled infrastructure with clustered load balancer. |
+| Filename                             | Description |
+|-------------------------------------|-------------|
+| `0-simple_web_stack`                | One-server LAMP stack with DNS |
+| `1-distributed_web_infrastructure`  | Adds load balancing and redundancy |
+| `2-secured_and_monitored_web_infrastructure` | Adds security and monitoring |
+| `3-scale_up`                        | Final scaled architecture with clustered LB |
 
 ---
 
-## 🔐 DNS Configuration Example
+**Author**: [@nuhamintesfe](https://github.com/nuhamintesfe)  
+**Repo**: `alx-system_engineering-devops`
 
-```txt
-foobar.com      IN A     8.8.8.8
-www             IN CNAME foobar.com
+> Note: Diagrams are available in each task file and hosted externally (Imgur).
