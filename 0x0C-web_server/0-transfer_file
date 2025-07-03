@@ -3,14 +3,21 @@
 #scp / path/to/file username@a:/path/to/destination
 #handcoded: scp -i ~/.ssh/id_rsa README.md ubuntu@54.173.231.174
 
-if [ "$#" -lt 4 ]; then
-    echo "Usage: 0-transfer_file PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
+if [ $# -lt 4 ]; then
+    echo "Usage: $0 PATH_TO_FILE IP USERNAME PATH_TO_SSH_KEY"
     exit 1
 fi
 
-FILE="$1"
+PATH_TO_FILE="$1"
 IP="$2"
-USER="$3"
-KEY="$4"
+USERNAME="$3"
+PATH_TO_SSH_KEY="$4"
 
-scp -i "$KEY" -o StrictHostKeyChecking=no "$FILE" "$USER@$IP:~/"
+scp -o StrictHostKeyChecking=no -i "$PATH_TO_SSH_KEY" "$PATH_TO_FILE" "$USERNAME@$IP:~/"
+
+if [ "$?" -eq 0 ]; then
+    echo "File transfer completed successfully"
+else
+    echo "File transfer failed"
+    exit 1
+fi
