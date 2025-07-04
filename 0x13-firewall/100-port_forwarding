@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Configures UFW to forward all TCP traffic from port 8080 to port 80 on 1299144-web-01
+
+# Enable IP forwarding
+sysctl -w net.ipv4.ip_forward=1
+sed -i 's/^#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/' /etc/sysctl.conf
+
+# Create the forwarding rule using iptables
+iptables -t nat -A PREROUTING -p tcp --dport 8080 -j REDIRECT --to-port 80
+
+# Save iptables rule for persistence after reboot
+apt-get install -y iptables-persistent
+netfilter-persistent save
+
+# Ensure UFW allows port 8080 as well
+ufw allow 8080/tcp
+
+# Display listening ports (for debug)
+netstat -tulpn | grep LISTEN
