@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
-# Configures Nginx with a custom header X-Served-By that returns the server's hostname
+# Configures Nginx to serve a custom HTTP header X-Served-By with the hostname
 
-apt-get -y update
-apt-get -y install nginx
+# Install nginx
+apt-get update -y
+apt-get install -y nginx
 
-# Update default index page
-echo "Hello World!" > /var/www/html/index.nginx-debian.html
+# Set Hello World page
+echo "Hello World!" > /var/www/html/index.html
 
-# Add custom header to Nginx config
-if ! grep -q "add_header X-Served-By" /etc/nginx/nginx.conf; then
-    sed -i "/http {/a \\    add_header X-Served-By \$hostname;" /etc/nginx/nginx.conf
-fi
+# Add custom header in Nginx main config to be inherited by all responses
+# This will include the hostname in X-Served-By
+sed -i "/http {/a \    add_header X-Served-By \$hostname;" /etc/nginx/nginx.conf
 
-# Restart Nginx to apply changes
+# Restart nginx to apply changes
 service nginx restart
-
