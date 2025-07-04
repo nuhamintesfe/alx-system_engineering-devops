@@ -1,19 +1,35 @@
 #!/usr/bin/env bash
-# Configures Nginx to serve a custom HTTP header X-Served-By with a specific hostname
+# Configures Nginx server with custom HTTP header and sets persistent hostname
 
-# Step 1: Set the hostname explicitly (replace with correct one for each server)
-CUSTOM_HOSTNAME="1299144-web-01"
-hostnamectl set-hostname "$CUSTOM_HOSTNAME"
+# Ensure a hostname is passed
+if [ -z "$1" ]; then
+  echo "Usage: $0 HOSTNAME"
+  exit 1
+fi
 
-# Step 2: Install Nginx
+HOSTNAME="$1"
+
+# Set static hostname
+hostnamectl set-hostname --static "$HOSTNAME"
+
+# Update /etc/hosts
+if ! grep -q "$HOSTNAME" /etc/hosts; then
+  echo "127.0.0.1 localhost $HOSTNAME" >> /etc/hosts
+fi
+
+# Persist hostname through cloud-init
+sed -i 's/preserve_hostname: false/preserve_hostname: true/' /etc/cloud/cloud.cfg || echo 'preserve_hostname: true' >> /etc/cloud/cloud.cfg
+
+# Install Nginx
 apt-get update -y
 apt-get install -y nginx
 
-# Step 3: Write Hello World! to index page
-echo "Hello World!" > /var/www/html/index.html
+# Create Hello World page
+echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
-# Step 4: Inject custom HTTP header manually with the fixed hostname
-sed -i "/http {/a \    add_header X-Served-By $CUSTOM_HOSTNAME;" /etc/nginx/nginx.conf
+# Add custom HTTP header to Nginx config
+sed -i "/include \/etc\/nginx\/sites-enabled\/*;/a \\    add_header X-Served-By \"$HOSTNAME\";" /etc/nginx/nginx.conf
 
-# Step 5: Restart Nginx
+# Restart Nginx
 service nginx restart
+
