@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
-# Configures Nginx to serve a custom HTTP header X-Served-By with the hostname
+# Configures Nginx to serve a custom HTTP header X-Served-By with a specific hostname
 
-# Install nginx
+# Step 1: Set the hostname explicitly (replace with correct one for each server)
+CUSTOM_HOSTNAME="1299144-web-01"
+hostnamectl set-hostname "$CUSTOM_HOSTNAME"
+
+# Step 2: Install Nginx
 apt-get update -y
 apt-get install -y nginx
 
-# Set Hello World page
+# Step 3: Write Hello World! to index page
 echo "Hello World!" > /var/www/html/index.html
 
-# Add custom header in Nginx main config to be inherited by all responses
-# This will include the hostname in X-Served-By
-sed -i "/http {/a \    add_header X-Served-By \$hostname;" /etc/nginx/nginx.conf
+# Step 4: Inject custom HTTP header manually with the fixed hostname
+sed -i "/http {/a \    add_header X-Served-By $CUSTOM_HOSTNAME;" /etc/nginx/nginx.conf
 
-# Restart nginx to apply changes
+# Step 5: Restart Nginx
 service nginx restart
