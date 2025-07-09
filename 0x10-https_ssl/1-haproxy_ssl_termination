@@ -1,0 +1,21 @@
+global
+    log stdout format raw daemon
+    maxconn 2048
+    tune.ssl.default-dh-param 2048
+
+defaults
+    mode http
+    timeout connect 5s
+    timeout client  50s
+    timeout server  50s
+    log global
+
+frontend https_front
+    bind *:443 ssl crt /etc/ssl/certs/haproxy.pem
+    mode http
+    default_backend webservers
+
+backend webservers
+    balance roundrobin
+    server web01 <WEB-01-IP>:80 check
+    server web02 <WEB-02-IP>:80 check
